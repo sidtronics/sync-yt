@@ -6,20 +6,21 @@ import os
 import re
 
 
-def parse_rc(rc_path: Path = Path("~/.config/sync-yt/rc.json").expanduser()):
+def parse_rc(rc_path: Path):
 
     try:
         with open(rc_path, "r") as file:
             config = json.load(file)
     except json.JSONDecodeError as e:
-        print(f"[sync-yt] ERROR: error parsing {rc_path} : {e}")
+        print(f"[sync-yt] ERROR: error parsing \"{rc_path}\" : {e}")
         exit(1)
     except FileNotFoundError:
-        print(f"[sync-yt] ERROR: file at {rc_path} does not exist.")
+        print(f"[sync-yt] ERROR: file at \"{rc_path}\" does not exist.")
         exit(1)
     except Exception as e:
         print(f"[sync-yt] ERROR: An unexpected error occured: {e}")
     else:
+        print(f"[sync-yt] INFO: Using config file: \"{rc_path}\"\n")
         return config
 
 
@@ -29,8 +30,8 @@ def remove_video(playlist_dir: Path, video_id: str):
 
     for file_name in os.listdir(playlist_dir):
         if pattern.match(file_name):
+            print(f"[sync-yt] INFO: Removing item: ID: \"{video_id}\"")
             os.remove(os.path.join(playlist_dir, file_name))
-            print(f"[sync-yt] INFO: Removed {file_name}")
             break
 
 
@@ -55,8 +56,6 @@ def remove_from_archive(playlist_dir: Path, video_ids: list):
     archive.writelines(archive_records)
     archive.close()
 
-    print(f"[sync-yt] INFO: Updated {os.path.basename(playlist_dir)}/archive.txt")
-
 
 def get_playlist(playlist_url: str, cookiesfrombrowser: str = None):
 
@@ -71,7 +70,7 @@ def get_playlist(playlist_url: str, cookiesfrombrowser: str = None):
     for video in info["entries"] or []:
         video_ids.add(video["id"])
         if video["duration"] is None:
-            print(f"[sync-yt] INFO: Unavailable video detected. ID: {video["id"]}")
+            print(f"[sync-yt] INFO: Unavailable video detected: ID: \"{video["id"]}\"")
 
     return video_ids
 
@@ -80,11 +79,17 @@ def get_archive(playlist_dir: Path):
 
     archive_path = Path(os.path.join(playlist_dir, "archive.txt"))
 
-    return [
+    return set(
         line[8:]
         for line in archive_path.read_text(encoding="utf8").splitlines()
         if line.startswith("youtube ")
-    ]
+    )
+
+
+def download_yt(yt_dlp_args: dict, urls):
+
+    with YoutubeDL(yt_dlp_args) as ydl:
+        ydl.download(urls)
 
 
 def sync_playlist(
@@ -102,7 +107,8 @@ def sync_playlist(
     yt_dlp_args = {
         "download_archive": archive_path,
         "paths": {"home": playlist_dir},
-        "quiet": True,
+        'ignoreerrors': 'only_download',
+        "quiet": True
     }
 
     if cookiesfrombrowser is not None:
@@ -121,18 +127,39 @@ def sync_playlist(
             }
         ]
 
-    with YoutubeDL(yt_dlp_args) as ydl:
-        ydl.download(playlist_url)
+    if not os.path.exists(archive_path):
+        print(f"[sync-yt] INFO: Downloading new playlist at: \"{playlist_dir}\"")
+        download_yt(yt_dlp_args, playlist_url)
+        playlist_name = os.path.basename(playlist_dir)
+        print(f"[sync-yt] INFO: Created: \"{playlist_name}/archive.txt\"")
+        print(f"[sync-yt] INFO: Synced: \"{playlist_name}\"\n")
+        return
 
-    video_ids = get_playlist(playlist_url, cookiesfrombrowser)
+    playlist_ids = get_playlist(playlist_url, cookiesfrombrowser)
     archive_ids = get_archive(playlist_dir)
 
-    removed_ids = [id for id in archive_ids if id not in video_ids]
+    # Adding new videos to local playlist:
+    added_ids = playlist_ids - archive_ids
+
+    for id in added_ids:
+        print(f"[sync-yt] INFO: Downloading new item: ID: \"{id}\"")
+
+    download_yt(yt_dlp_args, added_ids)
+
+    # Removing videos from local playlist:
+    removed_ids = archive_ids - playlist_ids
 
     for id in removed_ids:
         remove_video(playlist_dir, id)
 
     remove_from_archive(playlist_dir, removed_ids)
+
+    if len(added_ids) == 0 and len(removed_ids) == 0:
+        print("[sync-yt] INFO: Local playlist already up to date.\n")
+    else:
+        playlist_name = os.path.basename(playlist_dir)
+        print(f"[sync-yt] INFO: Updated: \"{playlist_name}/archive.txt\"")
+        print(f"[sync-yt] INFO: Synced: \"{playlist_name}\"\n")
 
 
 def main():
@@ -147,18 +174,21 @@ def main():
     sync_dir = Path(config["sync_dir"]).expanduser()
     if not os.path.exists(sync_dir):
         print(f"[sync-yt] ERROR: sync_dir does not exist ({sync_dir}).")
+        exit(1)
 
     cookiesfrombrowser = config["cookies_from_browser"]
 
     for playlist in config["playlists"]:
         playlist_dir = os.path.join(sync_dir, playlist["name"])
-        print(f'[sync-yt] INFO: Syncing playlist "{playlist["name"]}" ')
+        print(f"[sync-yt] INFO: Syncing playlist: \"{playlist["name"]}\"")
         sync_playlist(
             playlist_dir,
             playlist["url"],
             playlist["convert_to_audio"],
             cookiesfrombrowser,
         )
+
+    print("[sync-yt] INFO: Finished Syncing")
 
 
 if __name__ == "__main__":
