@@ -57,11 +57,11 @@ def remove_from_archive(playlist_dir: Path, video_ids: list):
     archive.close()
 
 
-def get_playlist(playlist_url: str, cookiesfrombrowser: str = None):
+def get_playlist(playlist_url: str, cookies_from_browser: str = None):
 
     yt_dlp_args = {"extract_flat": "in_playlist", "quiet": True, "no_warnings": True}
-    if cookiesfrombrowser is not None:
-        yt_dlp_args["cookiesfrombrowser"] = (cookiesfrombrowser,)
+    if cookies_from_browser is not None:
+        yt_dlp_args["cookiesfrombrowser"] = (cookies_from_browser,)
 
     with YoutubeDL(yt_dlp_args) as ydl:
         info = ydl.extract_info(playlist_url)
@@ -96,7 +96,7 @@ def sync_playlist(
     playlist_dir: Path,
     playlist_url: str,
     convert_to_audio: bool = False,
-    cookiesfrombrowser: str = None,
+    cookies_from_browser: str = None,
 ):
 
     if not os.path.exists(playlist_dir):
@@ -112,8 +112,8 @@ def sync_playlist(
         "quiet": True
     }
 
-    if cookiesfrombrowser is not None:
-        yt_dlp_args["cookiesfrombrowser"] = (cookiesfrombrowser,)
+    if cookies_from_browser is not None:
+        yt_dlp_args["cookiesfrombrowser"] = (cookies_from_browser,)
         # Workaround for a bug when downloading from private playlists:
         yt_dlp_args["extractor_args"] = {"youtube": {"player_client": ["ios"]}}
 
@@ -135,7 +135,7 @@ def sync_playlist(
         print(f"[sync-yt] INFO: Synced: \"{playlist_name}\"\n")
         return
 
-    playlist_ids = get_playlist(playlist_url, cookiesfrombrowser)
+    playlist_ids = get_playlist(playlist_url, cookies_from_browser)
     archive_ids = get_archive(playlist_dir)
 
     added_ids = playlist_ids - archive_ids
@@ -177,7 +177,7 @@ def main():
         print(f"[sync-yt] ERROR: sync_dir does not exist ({sync_dir}).")
         exit(1)
 
-    cookiesfrombrowser = config["cookies_from_browser"]
+    cookies_from_browser = config["cookies_from_browser"]
 
     for playlist in config["playlists"]:
         playlist_dir = os.path.join(sync_dir, playlist["name"])
@@ -186,7 +186,7 @@ def main():
             playlist_dir,
             playlist["url"],
             playlist["convert_to_audio"],
-            cookiesfrombrowser,
+            cookies_from_browser,
         )
 
     print("[sync-yt] INFO: Finished Syncing")
