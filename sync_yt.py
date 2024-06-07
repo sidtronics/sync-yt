@@ -103,6 +103,7 @@ def sync_playlist(
         os.mkdir(playlist_dir)
 
     archive_path = os.path.join(playlist_dir, "archive.txt")
+    playlist_name = os.path.basename(playlist_dir)
 
     yt_dlp_args = {
         "download_archive": archive_path,
@@ -130,7 +131,6 @@ def sync_playlist(
     if not os.path.exists(archive_path):
         print(f"[sync-yt] INFO: Downloading new playlist at: \"{playlist_dir}\"")
         download_yt(yt_dlp_args, playlist_url)
-        playlist_name = os.path.basename(playlist_dir)
         print(f"[sync-yt] INFO: Created: \"{playlist_name}/archive.txt\"")
         print(f"[sync-yt] INFO: Synced: \"{playlist_name}\"\n")
         return
@@ -138,28 +138,29 @@ def sync_playlist(
     playlist_ids = get_playlist(playlist_url, cookiesfrombrowser)
     archive_ids = get_archive(playlist_dir)
 
-    # Adding new videos to local playlist:
     added_ids = playlist_ids - archive_ids
-
-    for id in added_ids:
-        print(f"[sync-yt] INFO: Downloading new item: ID: \"{id}\"")
-
-    download_yt(yt_dlp_args, added_ids)
-
-    # Removing videos from local playlist:
     removed_ids = archive_ids - playlist_ids
-
-    for id in removed_ids:
-        remove_item(playlist_dir, id)
-
-    remove_from_archive(playlist_dir, removed_ids)
 
     if len(added_ids) == 0 and len(removed_ids) == 0:
         print("[sync-yt] INFO: Local playlist already up to date.\n")
-    else:
-        playlist_name = os.path.basename(playlist_dir)
-        print(f"[sync-yt] INFO: Updated: \"{playlist_name}/archive.txt\"")
-        print(f"[sync-yt] INFO: Synced: \"{playlist_name}\"\n")
+        return
+
+    # Adding new videos to local playlist:
+    if not len(added_ids) == 0:
+        for id in added_ids:
+            print(f"[sync-yt] INFO: Downloading new item: ID: \"{id}\"")
+
+        download_yt(yt_dlp_args, added_ids)
+
+    # Removing videos from local playlist:
+    if not len(removed_ids) == 0:
+        for id in removed_ids:
+            remove_item(playlist_dir, id)
+
+        remove_from_archive(playlist_dir, removed_ids)
+
+    print(f"[sync-yt] INFO: Updated: \"{playlist_name}/archive.txt\"")
+    print(f"[sync-yt] INFO: Synced: \"{playlist_name}\"\n")
 
 
 def main():
