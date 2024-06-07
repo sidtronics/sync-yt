@@ -24,7 +24,7 @@ def parse_rc(rc_path: Path):
         return config
 
 
-def remove_video(playlist_dir: Path, video_id: str):
+def remove_item(playlist_dir: Path, video_id: str):
 
     pattern = re.compile(fr".*\[{video_id}\]\..*")
 
@@ -150,7 +150,7 @@ def sync_playlist(
     removed_ids = archive_ids - playlist_ids
 
     for id in removed_ids:
-        remove_video(playlist_dir, id)
+        remove_item(playlist_dir, id)
 
     remove_from_archive(playlist_dir, removed_ids)
 
