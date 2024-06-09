@@ -12,7 +12,7 @@ def parse_rc(rc_path: Path):
         with open(rc_path, "r") as file:
             config = json.load(file)
     except json.JSONDecodeError as e:
-        print(f"[sync-yt] ERROR: error parsing \"{rc_path}\" : {e}")
+        print(f"[sync-yt] ERROR: error while parsing \"{rc_path}\" : {e}")
         exit(1)
     except FileNotFoundError:
         print(f"[sync-yt] ERROR: file at \"{rc_path}\" does not exist.")
