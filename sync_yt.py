@@ -30,7 +30,7 @@ def remove_item(playlist_dir: Path, video_id: str):
 
     for file_name in os.listdir(playlist_dir):
         if pattern.match(file_name):
-            print(f"[sync-yt] INFO: Removing item: ID: \"{video_id}\"")
+            print(f"[sync-yt] INFO: Removing: ID: \"{video_id}\"")
             os.remove(os.path.join(playlist_dir, file_name))
             break
 
@@ -132,7 +132,7 @@ def sync_playlist(
         print(f"[sync-yt] INFO: Downloading new playlist at: \"{playlist_dir}\"")
         download_yt(yt_dlp_args, playlist_url)
         print(f"[sync-yt] INFO: Created: \"{playlist_name}/archive.txt\"")
-        print(f"[sync-yt] INFO: Synced: \"{playlist_name}\"\n")
+        print(f"[sync-yt] INFO: Synced: \"{playlist_name}\"")
         return
 
     playlist_ids = get_playlist(playlist_url, cookies_from_browser)
@@ -142,13 +142,13 @@ def sync_playlist(
     removed_ids = archive_ids - playlist_ids
 
     if len(added_ids) == 0 and len(removed_ids) == 0:
-        print("[sync-yt] INFO: Local playlist already up to date.\n")
+        print(f"[sync-yt] INFO: \"{playlist_name}\" is up to date.")
         return
 
     # Adding new videos to local playlist:
     if not len(added_ids) == 0:
         for id in added_ids:
-            print(f"[sync-yt] INFO: Downloading new item: ID: \"{id}\"")
+            print(f"[sync-yt] INFO: Downloading: ID: \"{id}\"")
 
         download_yt(yt_dlp_args, added_ids)
 
@@ -160,7 +160,7 @@ def sync_playlist(
         remove_from_archive(playlist_dir, removed_ids)
 
     print(f"[sync-yt] INFO: Updated: \"{playlist_name}/archive.txt\"")
-    print(f"[sync-yt] INFO: Synced: \"{playlist_name}\"\n")
+    print(f"[sync-yt] INFO: Synced: \"{playlist_name}\"")
 
 
 def main():
@@ -181,13 +181,14 @@ def main():
 
     for playlist in config["playlists"]:
         playlist_dir = os.path.join(sync_dir, playlist["name"])
-        print(f"[sync-yt] INFO: Syncing playlist: \"{playlist["name"]}\"")
+        print(f"[sync-yt] INFO: Syncing: \"{playlist["name"]}\"")
         sync_playlist(
             playlist_dir,
             playlist["url"],
             playlist["convert_to_audio"],
             cookies_from_browser,
         )
+        print("-"*50)
 
     print("[sync-yt] INFO: Finished Syncing")
 
