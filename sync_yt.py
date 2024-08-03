@@ -114,8 +114,6 @@ def sync_playlist(
 
     if cookies_from_browser is not None:
         yt_dlp_args["cookiesfrombrowser"] = (cookies_from_browser,)
-        # Workaround for a bug when downloading from private playlists:
-        yt_dlp_args["extractor_args"] = {"youtube": {"player_client": ["ios"]}}
 
     if convert_to_audio:
         yt_dlp_args["format"] = "bestaudio/best"
