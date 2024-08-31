@@ -25,7 +25,7 @@ $ chmod +x sync_yt.py
 
 ## Configuration
 
-Configuration file is first searched at `~/.config/sync-yt/config.json` on POSIX compliant systems and at\
+Configuration file is first searched at `~/.config/sync-yt/config.json` on POSIX compliant systems or at\
 `C:\Users\<User>\AppData\Local\sync-yt\config.json` on Windows. If config file is not found, config file in program directory is used.
 
 On linux copy the sample config file provided to XDG_CONFIG_HOME.\
@@ -37,12 +37,12 @@ On linux copy the sample config file provided to XDG_CONFIG_HOME.\
 ### `sync_dir`
 - **Type**: `string`
 - **Description**: Specifies the local directory where YouTube playlist folders will be synced. This path can be relative to the user's home directory (using `~`) or an absolute path.
-- **Examples**: `~/Music , D:\YouTube`
+- **Examples**: `"~/Music" , "D:\YouTube"`
 
 ### `cookies_from_browser`
 - **Type**: `string`
-- **Description**: Specifies the browser from which cookies should be extracted. This is required for downloading private playlists that are accessible only when signed into a Google account. Supported browsers include `firefox`, `chrome`, `edge`, etc. You can choose to leave this option blank if not downloading private playlists.
-- **Examples**: `firefox, chrome, brave, edge, vivaldi`
+- **Description**: Specifies the browser from which cookies should be extracted. This is required for downloading private playlists that are accessible only when signed into a Google account. Supported browsers include `firefox`, `chrome`, `edge`, etc. You can choose to leave this option blank if you're not downloading private playlists.
+- **Examples**: `"firefox", "chrome", "brave", "edge", "vivaldi"`
 
 ### `playlists`
 - **Type**: `array`
