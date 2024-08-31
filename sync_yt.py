@@ -6,21 +6,21 @@ import os
 import re
 
 
-def parse_rc(rc_path: Path):
+def parse_config(config_path: Path):
 
     try:
-        with open(rc_path, "r") as file:
+        with open(config_path, "r") as file:
             config = json.load(file)
     except json.JSONDecodeError as e:
-        print(f"[sync-yt] ERROR: error while parsing \"{rc_path}\" : {e}")
+        print(f"[sync-yt] ERROR: error while parsing \"{config_path}\" : {e}")
         exit(1)
     except FileNotFoundError:
-        print(f"[sync-yt] ERROR: file at \"{rc_path}\" does not exist.")
+        print(f"[sync-yt] ERROR: file at \"{config_path}\" does not exist.")
         exit(1)
     except Exception as e:
         print(f"[sync-yt] ERROR: An unexpected error occured: {e}")
     else:
-        print(f"[sync-yt] INFO: Using config file: \"{rc_path}\"\n")
+        print(f"[sync-yt] INFO: Using config file: \"{config_path}\"\n")
         return config
 
 
@@ -163,12 +163,7 @@ def sync_playlist(
 
 def main():
 
-    if os.name == "posix":
-        default_path = Path("~/.config/sync-yt/rc.json").expanduser()
-    elif os.name == "nt":
-        default_path = Path(r"~\AppData\Local\sync-yt\rc.json").expanduser()
-
-    config = parse_rc(default_path)
+    config = parse_config("./config.json")
 
     sync_dir = Path(config["sync_dir"]).expanduser()
     if not os.path.exists(sync_dir):
