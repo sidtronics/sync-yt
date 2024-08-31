@@ -26,7 +26,7 @@ $ chmod +x sync_yt.py
 ## Configuration
 
 Configuration file is first searched at `~/.config/sync-yt/config.json` on POSIX compliant systems and at\
-`C:\Users\\_User_\AppData\Local\sync-yt\config.json` on Windows. If config file is not found the sample config file in program directory is used.
+`C:\Users\<User>\AppData\Local\sync-yt\config.json` on Windows. If config file is not found, config file in program directory is used.
 
 On linux copy the sample config file provided to XDG_CONFIG_HOME.\
 `$ cp config.json ~/.config/sync-yt/config.json`
@@ -37,7 +37,7 @@ On linux copy the sample config file provided to XDG_CONFIG_HOME.\
 ### `sync_dir`
 - **Type**: `string`
 - **Description**: Specifies the local directory where YouTube playlist folders will be synced. This path can be relative to the user's home directory (using `~`) or an absolute path.
-- **Examples**: `~/Music , ~/Desktop/Music`
+- **Examples**: `~/Music , D:\YouTube`
 
 ### `cookies_from_browser`
 - **Type**: `string`
