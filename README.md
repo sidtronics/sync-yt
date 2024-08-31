@@ -8,14 +8,14 @@ making it a comprehensive tool for managing YouTube content locally.
 ## Download
 
 Clone the repo:\
-`$ git clone https://github.com/sidtronics/sync-yt.git`
+```$ git clone https://github.com/sidtronics/sync-yt.git```
 
 or download [zip](https://github.com/sidtronics/sync-yt/archive/refs/heads/main.zip).
 
 ## Installation
 
 Install dependencies:\
-`$ pip install -r requirements.txt`
+```$ pip install -r requirements.txt```
 
 Copy to PATH (Linux/MacOS):
 ```
@@ -29,7 +29,7 @@ Configuration file is first searched at `~/.config/sync-yt/config.json` on POSIX
 `C:\Users\<User>\AppData\Local\sync-yt\config.json` on Windows. If config file is not found, config file in program directory is used.
 
 On linux copy the sample config file provided to XDG_CONFIG_HOME.\
-`$ cp config.json ~/.config/sync-yt/config.json`
+```$ cp config.json ~/.config/sync-yt/config.json```
 
 
 ## config.json
@@ -87,10 +87,10 @@ Below is a sample `config.json` file demonstrating the use of the configuration 
 
 ### Windows
 In program directory:\
-``$ python sync_yt.py``
+```$ python sync_yt.py```
 
 ### Linux/MacOS
-``$ sync-yt``
+```$ sync-yt```
 
 ## Notes
 
