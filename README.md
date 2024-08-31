@@ -1,5 +1,5 @@
 # sync-yt
-`sync-yt` is a simple python tool designed to sync YouTube playlists into a designated local folder.
+**sync-yt** is a simple python tool designed to sync YouTube playlists into a designated local folders.
 It offers the flexibility to convert videos into audio files, making it ideal for downloading youtube music playlists.
 The configuration, including the playlist URLs, sync directory, and conversion options, is managed through a JSON config file.
 A key feature of sync-yt is its ability to download private playlists by specifying a browser that is signed into a Google account associated with those playlists,
@@ -7,29 +7,29 @@ making it a comprehensive tool for managing YouTube content locally.
 
 ## Download
 
-Clone the repo:
+Clone the repo:\
 `$ git clone https://github.com/sidtronics/sync-yt.git`
 
 or download [zip](https://github.com/sidtronics/sync-yt/archive/refs/heads/main.zip).
 
 ## Installation
 
-Install dependencies:
+Install dependencies:\
 `$ pip install -r requirements.txt`
 
 Copy to PATH (Linux/MacOS):
-```bash
+```
 $ chmod +x sync_yt.py
 # cp sync_yt.py /usr/local/bin/sync-yt
 ```
 
 ## Configuration
 
-Configuration file is first searched at `~/.config/sync-yt/config.json` on POSIX compliant systems and at
+Configuration file is first searched at `~/.config/sync-yt/config.json` on POSIX compliant systems and at\
 `C:\Users\\_User_\AppData\Local\sync-yt\config.json` on Windows. If config file is not found the sample config file in program directory is used.
 
-On linux copy the sample config file provided to XDG_CONFIG_HOME.
-`cp config.json ~/.config/sync-yt/config.json`
+On linux copy the sample config file provided to XDG_CONFIG_HOME.\
+`$ cp config.json ~/.config/sync-yt/config.json`
 
 
 ## config.json
@@ -86,7 +86,7 @@ Below is a sample `config.json` file demonstrating the use of the configuration 
 ## Usage
 
 ### Windows
-In program directory:
+In program directory:\
 ``$ python sync_yt.py``
 
 ### Linux/MacOS
