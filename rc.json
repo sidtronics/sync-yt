@@ -1,0 +1,20 @@
+{
+    "sync_dir": "~/Music",
+
+    "cookies_from_browser": "firefox",
+
+    "playlists": [
+
+        {
+            "name": "Daft Punk - Discovery",
+            "url": "https://www.youtube.com/playlist?list=PLSdoVPM5WnndSQEXRz704yQkKwx76GvPV",
+            "convert_to_audio": true
+        },
+
+        {
+            "name": "Minuscule Compilation",
+            "url": "https://www.youtube.com/playlist?list=PL7eLsxQrsg-4DNH682TNzgSlCXEeJ3IsX",
+            "convert_to_audio": false
+        }
+    ]
+}
