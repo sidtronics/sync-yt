@@ -32,7 +32,7 @@ $ chmod +x sync_yt.py
 Configuration file is first searched at `~/.config/sync-yt/config.json` on POSIX compliant systems or at\
 `C:\Users\<User>\AppData\Local\sync-yt\config.json` on Windows. If config file is not found, config file in program directory is used.
 
-On linux copy the sample config file provided to XDG_CONFIG_HOME.\
+On linux copy the sample config file provided to XDG_CONFIG_HOME:
 ```
 $ cp config.json ~/.config/sync-yt/config.json
 ```
@@ -92,7 +92,7 @@ Below is a sample `config.json` file demonstrating the use of the configuration 
 ## Usage
 
 ### Windows
-In program directory:\
+In program directory:
 ```
 $ python sync_yt.py
 ```
