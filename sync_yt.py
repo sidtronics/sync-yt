@@ -163,7 +163,15 @@ def sync_playlist(
 
 def main():
 
-    config = parse_config("./config.json")
+    if os.name == 'posix':
+        default_path = Path("~/.config/sync-yt/config.json").expanduser()
+    elif os.name == 'nt':
+        default_path = Path(r"~\AppData\Local\sync-yt\config.json").expanduser()
+
+    if not os.path.exists(default_path):
+        default_path = Path("./config.json")
+
+    config = parse_config(default_path)
 
     sync_dir = Path(config["sync_dir"]).expanduser()
     if not os.path.exists(sync_dir):
