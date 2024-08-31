@@ -4,6 +4,7 @@ It offers the flexibility to convert videos into audio files, making it ideal fo
 The configuration, including the playlist URLs, sync directory, and conversion options, is managed through a JSON config file.
 A key feature of sync-yt is its ability to download private playlists by specifying a browser that is signed into a Google account associated with those playlists,
 making it a comprehensive tool for managing YouTube content locally.
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fsidtronics%2Fsync-yt&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 
 ## Download
 
