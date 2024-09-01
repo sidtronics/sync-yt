@@ -18,19 +18,24 @@ or download [zip](https://github.com/sidtronics/sync-yt/archive/refs/heads/main.
 
 ## Installation
 
-### Windows
+### Windows:
 Install dependencies:
 ```
 $ pip install -r requirements.txt
 ```
 
-### Linux
+Install ffmpeg:
+Follow [this guide](https://www.geeksforgeeks.org/how-to-install-ffmpeg-on-windows/) to properly install ffmpeg.
+
+### Linux:
 
 You can just install yt-dlp from your distro specific package manager.\
 Eg. Arch Linux:
 ```
 # pacman -S yt-dlp
 ```
+
+**Note:** ffmpeg will be automatically installed as dependency of yt-dlp.
 
 Copy to PATH:
 ```
@@ -102,13 +107,13 @@ Below is a sample `config.json` file demonstrating the use of the configuration 
 ```
 ## Usage
 
-### Windows
+### Windows:
 In program directory:
 ```
 $ python sync_yt.py
 ```
 
-### Linux
+### Linux:
 ```
 $ sync-yt
 ```
@@ -122,3 +127,5 @@ You might want to backup the locally synced video/audio first as it will be dele
 This can be useful to find replacement video and switch it with unavailable one on upstream playlist.
 
 + Two different playlist can share same `name` attribute to sync both playlists in single folder.
+
++ You can skip installation of ffmpeg but it is highly recommended especially if you are using `convert_to_audio` option.
