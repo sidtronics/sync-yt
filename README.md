@@ -18,9 +18,18 @@ or download [zip](https://github.com/sidtronics/sync-yt/archive/refs/heads/main.
 
 ## Installation
 
+### Windows
 Install dependencies:
 ```
 $ pip install -r requirements.txt
+```
+
+### Linux
+```
+You can just install yt-dlp from your distro specific package manager.
+Eg. Arch Linux:
+```
+# pacman -S yt-dlp
 ```
 
 Copy to PATH (Linux/MacOS):
