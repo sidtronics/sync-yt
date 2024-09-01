@@ -19,12 +19,12 @@ or download [zip](https://github.com/sidtronics/sync-yt/archive/refs/heads/main.
 ## Installation
 
 ### Windows:
-Install dependencies:
+#### Install dependencies:
 ```
 $ pip install -r requirements.txt
 ```
 
-Install ffmpeg:
+#### Install ffmpeg:
 Follow [this guide](https://www.geeksforgeeks.org/how-to-install-ffmpeg-on-windows/) to properly install ffmpeg.
 
 ### Linux:
@@ -37,7 +37,7 @@ Eg. Arch Linux:
 
 **Note:** ffmpeg will be automatically installed as dependency of yt-dlp.
 
-Copy to PATH:
+#### Copy to PATH:
 ```
 $ chmod +x sync_yt.py
 # cp sync_yt.py /usr/local/bin/sync-yt
