@@ -25,14 +25,14 @@ $ pip install -r requirements.txt
 ```
 
 ### Linux
-```
-You can just install yt-dlp from your distro specific package manager.
+
+You can just install yt-dlp from your distro specific package manager.\
 Eg. Arch Linux:
 ```
 # pacman -S yt-dlp
 ```
 
-Copy to PATH (Linux/MacOS):
+Copy to PATH:
 ```
 $ chmod +x sync_yt.py
 # cp sync_yt.py /usr/local/bin/sync-yt
@@ -108,7 +108,7 @@ In program directory:
 $ python sync_yt.py
 ```
 
-### Linux/MacOS
+### Linux
 ```
 $ sync-yt
 ```
