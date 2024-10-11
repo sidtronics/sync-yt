@@ -120,12 +120,9 @@ $ sync-yt
 
 ## Notes
 
-+ Manual intervention is needed when a video becomes unavailable. Remove it from upstream playlist to get rid of error/warning.
-You might want to backup the locally synced video/audio first as it will be deleted upon removal from upstream playlist.
-
-+ Unavailable videos are not deleted locally unless they are removed from upstream playlist.
-This can be useful to find replacement video and switch it with unavailable one on upstream playlist.
-
-+ Two different playlist can share same `name` attribute to sync both playlists in single folder.
++ Manual intervention is needed when a video becomes unavailable. Remove it from upstream youtube playlist to get rid of error/warning.
+Upon removal from upstream playlist it will be removed locally as well on next sync. So backup before syncing if needed.
+ 
++ Two different playlist can share same `name` attribute to sync both playlists in a single folder.
 
 + You can skip installation of ffmpeg but it is highly recommended especially if you are using `convert_to_audio` option.
