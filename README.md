@@ -12,22 +12,41 @@ It uses yt-dlp for downloading videos and a JSON based configuration file to def
 ## Requirements
 + Python 3.10+
 + yt-dlp
-+ FFmpeg (Highly recommended)
++ FFmpeg (Optional but highly recommended)
 
 ## Installation
-+ From PyPI 
-```
-$ pip install --user sync-yt
-```
 
-OR
++ ### Windows
+  + #### Install FFmpeg
+    Follow this [guide](https://www.geeksforgeeks.org/installation-guide/how-to-install-ffmpeg-on-windows/) to properly install FFmpeg on Windows.
+  + #### Install `sync-yt`
+    ```
+    $ pip install sync-yt
+    ```
 
-+ Build yourself
-```
-$ git clone https://github.com/sidtronics/sync-yt.git
-$ cd sync-yt
-$ pip install --user .
-```
++ ### Arch Linux
+  `sync-yt` is available on [AUR](https://aur.archlinux.org/packages/sync-yt). Use your favourite AUR helper.
+  ```
+  $ yay -S sync-yt
+  ```
+
++ ### Other Linux Distributions / macOS
+  Since `sync-yt` requires the latest version of `yt-dlp`, which may not be available in your OS’s official repositories,
+  using `pipx` is recommended.
+  + #### Install `pipx`
+    ##### Debain and derivatives (Ubuntu, Mint, Zorin etc..)
+    ```
+    $ sudo apt install pipx
+    ``` 
+    ##### macOS
+    ```
+    $ brew install pipx
+    ```
+  + #### Install `sync-yt`
+    ```
+    $ pipx ensurepath
+    $ pipx install sync-yt
+    ```
 
 ## Configuration
 
