@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sync-yt"
+requires-python = ">= 3.10"
+authors = [
+    {name = "Siddhesh Dharme", email = "siddheshdharme18@gmail.com"}
+]
+description = "CLI tool to mirror YouTube playlists into local directories"
+dependencies = ["yt-dlp >= 2025.08.27"]
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["yt-dlp", "youtube", "playlist", "sync", "downloader", "music", "videos", "cli"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: System :: Archiving :: Backup",
+    "Topic :: Internet",
+    "Topic :: Multimedia :: Sound/Audio",
+    "Topic :: Multimedia :: Video"
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://pypi.org/project/sync-yt/"
+Repository = "https://github.com/sidtronics/sync-yt"
+Issues = "https://github.com/sidtronics/sync-yt/issues"
+
+[project.scripts]
+sync-yt = "sync_yt:main"
+
+[tool.setuptools.dynamic]
+version = {attr = "sync_yt.__version__"}
