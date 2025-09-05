@@ -1,58 +1,38 @@
 # sync-yt
-**sync-yt** is a simple python tool designed to sync YouTube playlists into a designated local folders.
-It offers the flexibility to convert videos into audio files, making it ideal for downloading youtube music playlists.
-The configuration, including the playlist URLs, sync directory, and conversion options, is managed through a JSON config file.
-A key feature of sync-yt is its ability to download private playlists by specifying a browser that is signed into a Google account associated with those playlists,
-making it a comprehensive tool for managing YouTube content locally.
+**sync-yt** is a command-line tool that synchronizes YouTube playlists to local directories on your system.
+It uses yt-dlp for downloading videos and a JSON based configuration file to define playlists and other options.
 
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fsidtronics%2Fsync-yt&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
+## Features
++ Declarative config.json to specify playlists and other configurable options.
++ Option to save playlists in audio-only format, useful for music playlists.
++ Can sync private YouTube playlists by specifying the logged-in browser.
++ Automatically skips repeated video entries.
++ Detects videos which become unavailable.
 
-## Download
-
-Clone the repo:
-```
-$ git clone https://github.com/sidtronics/sync-yt.git
-```
-
-or download [zip](https://github.com/sidtronics/sync-yt/archive/refs/heads/main.zip).
+## Requirements
++ Python 3.10+
++ yt-dlp
++ FFmpeg (Highly recommended)
 
 ## Installation
-
-### Windows:
-#### Install dependencies:
++ From PyPI 
 ```
-$ pip install -r requirements.txt
+$ pip install --user sync-yt
 ```
 
-#### Install ffmpeg:
-Follow [this guide](https://www.geeksforgeeks.org/how-to-install-ffmpeg-on-windows/) to properly install ffmpeg.
+OR
 
-### Linux:
-
-You can just install yt-dlp from your distro specific package manager.\
-Eg. Arch Linux:
++ Build yourself
 ```
-# pacman -S yt-dlp
-```
-
-**Note:** ffmpeg will be automatically installed as dependency of yt-dlp.
-
-#### Copy to PATH:
-```
-$ chmod +x sync_yt.py
-# cp sync_yt.py /usr/local/bin/sync-yt
+$ git clone https://github.com/sidtronics/sync-yt.git
+$ cd sync-yt
+$ pip install --user .
 ```
 
 ## Configuration
 
 Configuration file is first searched at `~/.config/sync-yt/config.json` on POSIX compliant systems or at\
-`C:\Users\<User>\AppData\Local\sync-yt\config.json` on Windows. If config file is not found, config file in program directory is used.
-
-On linux copy the sample config file provided to XDG_CONFIG_HOME:
-```
-$ cp config.json ~/.config/sync-yt/config.json
-```
-
+`C:\Users\<User>\AppData\Local\sync-yt\config.json` on Windows.
 
 ## config.json
 
@@ -105,18 +85,12 @@ Below is a sample `config.json` file demonstrating the use of the configuration 
     ]
 }
 ```
+
 ## Usage
-
-### Windows:
-In program directory:
-```
-$ python sync_yt.py
-```
-
-### Linux:
 ```
 $ sync-yt
 ```
+
 
 ## Notes
 
@@ -125,4 +99,4 @@ Upon removal from upstream playlist it will be removed locally as well on next s
  
 + Two different playlist can share same `name` attribute to sync both playlists in a single folder.
 
-+ You can skip installation of ffmpeg but it is highly recommended especially if you are using `convert_to_audio` option.
++ You can skip installation of FFmpeg but it is highly recommended especially if you are using `convert_to_audio` option.
