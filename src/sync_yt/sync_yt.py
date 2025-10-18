@@ -95,6 +95,7 @@ def sync_playlist(
     playlist_dir: Path,
     playlist_url: str,
     convert_to_audio: bool = False,
+    format: str = None,
     cookies_from_browser: str = None,
 ):
 
@@ -115,25 +116,69 @@ def sync_playlist(
         yt_dlp_args["cookiesfrombrowser"] = (cookies_from_browser,)
 
     if convert_to_audio:
-        yt_dlp_args["format"] = "bestaudio/best"
-        yt_dlp_args["postprocessors"] = [
-            {
-                "key": "FFmpegExtractAudio",
-                "nopostoverwrites": False,
-                "preferredcodec": "best",
-                "preferredquality": "5",
-            }
+        
+        if format is None:
+            yt_dlp_args["format"] = "bestaudio/best"
+            preferred_codec = "best"
+            
+        else:
+            yt_dlp_args["format"] = "bestaudio/best"
+            preferred_codec = format
+        
+        metadata_compatible = {"mp3", "m4a", "flac", "opus", "ogg"}
+        thumbnail_compatible = {"mp3", "m4a", "flac"}
+
+        postprocessors = [
+        {
+            "key": "FFmpegExtractAudio",
+            "nopostoverwrites": False,
+            "preferredcodec": preferred_codec,
+            "preferredquality": "5",
+        }
         ]
 
-    if not os.path.exists(archive_path):
+        if preferred_codec in metadata_compatible:
+            postprocessors.append({"key": "FFmpegMetadata"})
+            yt_dlp_args["addmetadata"] = True
+            yt_dlp_args["parse_metadata"] = [
+                "title:%(title)s",
+                "uploader:%(artist)s",
+            ]
+        else:
+            yt_dlp_args["addmetadata"] = False
+
+
+        if preferred_codec in thumbnail_compatible:
+            postprocessors.append({"key": "EmbedThumbnail"})
+            yt_dlp_args["writethumbnail"] = True
+        else:
+            yt_dlp_args["writethumbnail"] = False
+
+        yt_dlp_args["postprocessors"] = postprocessors
+        
+    #if video
+    else:
+        if format is None:
+            yt_dlp_args["format"] = "bestvideo/best"
+        else:
+                yt_dlp_args["format"] = f"bestvideo[ext={format}]/best"
+        
+        yt_dlp_args["postprocessors"] = [
+                    {
+                        "key": "FFmpegVideoRemuxer",
+                        "preferedformat": format
+                    }
+        ]
+
+    if os.path.exists(archive_path):
+        archive_ids = get_archive(playlist_dir)
+    else:
         print(f'[sync-yt] INFO: Downloading new playlist at: "{playlist_dir}"')
-        download_yt(yt_dlp_args, playlist_url)
+        archive_ids = set()
+        Path(archive_path).touch()
         print(f'[sync-yt] INFO: Created: "{playlist_name}/archive.txt"')
-        print(f'[sync-yt] INFO: Synced: "{playlist_name}"')
-        return
 
     playlist_ids = get_playlist(playlist_url, cookies_from_browser)
-    archive_ids = get_archive(playlist_dir)
 
     added_ids = playlist_ids - archive_ids
     removed_ids = archive_ids - playlist_ids
@@ -144,11 +189,12 @@ def sync_playlist(
 
     # Adding new videos to local playlist:
     if not len(added_ids) == 0:
-        for id in added_ids:
-            print(f'[sync-yt] INFO: Downloading: ID: "{id}"')
-
-        download_yt(yt_dlp_args, added_ids)
-
+        total = len(added_ids)
+        print(f'[sync-yt] INFO: {total} new video(s) to download in "{playlist_name}".')
+        for i, vid in enumerate(added_ids, start=1):
+            print(f'[sync-yt] INFO: Downloading ({i}/{total}): ID: "{vid}"', flush=True)
+            download_yt(yt_dlp_args, [vid])
+            
     # Removing videos from local playlist:
     if not len(removed_ids) == 0:
         for id in removed_ids:
