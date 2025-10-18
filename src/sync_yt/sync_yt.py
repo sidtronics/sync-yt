@@ -120,7 +120,7 @@ def sync_playlist(
             {
                 "key": "FFmpegExtractAudio",
                 "nopostoverwrites": False,
-                "preferredcodec": "mp3",
+                "preferredcodec": "best",
                 "preferredquality": "5",
             },
             {"key": "EmbedThumbnail"},
