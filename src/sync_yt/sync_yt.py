@@ -85,12 +85,6 @@ def get_archive(playlist_dir: Path):
     )
 
 
-def download_yt(yt_dlp_args: dict, urls):
-
-    with YoutubeDL(yt_dlp_args) as ydl:
-        ydl.download(urls)
-
-
 def sync_playlist(
     playlist_dir: Path,
     playlist_url: str,
@@ -183,9 +177,10 @@ def sync_playlist(
         total = len(added_ids)
         print(f"[sync-yt] INFO: {total} new video(s) to download.")
 
+    with YoutubeDL(yt_dlp_args) as ydl:
         for i, id in enumerate(added_ids, start=1):
             print(f'[sync-yt] INFO: Downloading ({i}/{total}): ID: "{id}"', flush=True)
-            download_yt(yt_dlp_args, [id])
+            ydl.download(id)
 
     # Removing videos from local playlist:
     if not len(removed_ids) == 0:
