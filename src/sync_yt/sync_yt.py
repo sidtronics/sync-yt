@@ -117,16 +117,8 @@ def sync_playlist(
 
     if convert_to_audio:
 
-        if format is None:
-            yt_dlp_args["format"] = "bestaudio/best"
-            preferred_codec = "best"
-
-        else:
-            yt_dlp_args["format"] = "bestaudio/best"
-            preferred_codec = format
-
-        metadata_compatible = {"mp3", "m4a", "flac", "opus", "ogg"}
-        thumbnail_compatible = {"mp3", "m4a", "flac"}
+        yt_dlp_args["format"] = "bestaudio/best"
+        preferred_codec = format or "best"
 
         postprocessors = [
             {
@@ -137,7 +129,8 @@ def sync_playlist(
             }
         ]
 
-        if preferred_codec in metadata_compatible:
+        # Embed metadata if compatible format
+        if preferred_codec in {"mp3", "m4a", "flac", "opus", "ogg"}:
             postprocessors.append({"key": "FFmpegMetadata"})
             yt_dlp_args["addmetadata"] = True
             yt_dlp_args["parse_metadata"] = [
@@ -147,7 +140,8 @@ def sync_playlist(
         else:
             yt_dlp_args["addmetadata"] = False
 
-        if preferred_codec in thumbnail_compatible:
+        # Embed thumbnail as a cover art if compatible format
+        if preferred_codec in {"mp3", "m4a", "flac"}:
             postprocessors.append({"key": "EmbedThumbnail"})
             yt_dlp_args["writethumbnail"] = True
         else:
