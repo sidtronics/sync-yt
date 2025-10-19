@@ -188,13 +188,14 @@ def sync_playlist(
         return
 
     # Adding new videos to local playlist:
-    if not len(added_ids) == 0:
+    if added_ids:
         total = len(added_ids)
-        print(f'[sync-yt] INFO: {total} new video(s) to download in "{playlist_name}".')
-        for i, vid in enumerate(added_ids, start=1):
-            print(f'[sync-yt] INFO: Downloading ({i}/{total}): ID: "{vid}"', flush=True)
-            download_yt(yt_dlp_args, [vid])
-            
+        print(f"[sync-yt] INFO: {total} new video(s) to download.")
+
+        for i, id in enumerate(added_ids, start=1):
+            print(f'[sync-yt] INFO: Downloading ({i}/{total}): ID: "{id}"', flush=True)
+            download_yt(yt_dlp_args, [id])
+
     # Removing videos from local playlist:
     if not len(removed_ids) == 0:
         for id in removed_ids:
