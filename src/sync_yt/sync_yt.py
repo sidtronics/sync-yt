@@ -131,14 +131,14 @@ def sync_playlist(
 
         # Embed metadata if compatible format
         if preferred_codec in {"mp3", "m4a", "flac", "opus", "ogg"}:
-            postprocessors.append({"key": "FFmpegMetadata"})
-            yt_dlp_args["addmetadata"] = True
-            yt_dlp_args["parse_metadata"] = [
-                "title:%(title)s",
-                "uploader:%(artist)s",
-            ]
-        else:
-            yt_dlp_args["addmetadata"] = False
+            postprocessors.append(
+                {
+                    "add_chapters": False,
+                    "add_infojson": False,
+                    "add_metadata": True,
+                    "key": "FFmpegMetadata",
+                }
+            )
 
         # Embed thumbnail as a cover art if compatible format
         if preferred_codec in {"mp3", "m4a", "flac"}:
