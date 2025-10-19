@@ -187,7 +187,7 @@ def sync_playlist(
         print(f'[sync-yt] INFO: "{playlist_name}" is up to date.')
         return
 
-    # Adding new videos to local playlist:
+    # Download new videos
     if added_ids:
         total = len(added_ids)
         print(f"[sync-yt] INFO: {total} new video(s) to download.")
@@ -197,8 +197,8 @@ def sync_playlist(
             print(f'[sync-yt] INFO: Downloading ({i}/{total}): ID: "{id}"', flush=True)
             ydl.download(id)
 
-    # Removing videos from local playlist:
-    if not len(removed_ids) == 0:
+    # Remove videos
+    if removed_ids:
         for id in removed_ids:
             remove_item(playlist_dir, id)
 
