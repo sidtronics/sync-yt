@@ -135,7 +135,6 @@ def sync_playlist(
         "uploader:%(artist)s",
     ]
 
-
     if not os.path.exists(archive_path):
         print(f'[sync-yt] INFO: Downloading new playlist at: "{playlist_dir}"')
         download_yt(yt_dlp_args, playlist_url)
@@ -156,12 +155,11 @@ def sync_playlist(
     # Adding new videos to local playlist:
     if added_ids:
         total = len(added_ids)
-        print(f'[sync-yt] INFO: {total} new video(s) to download.')
+        print(f"[sync-yt] INFO: {total} new video(s) to download.")
 
         for i, id in enumerate(added_ids, start=1):
             print(f'[sync-yt] INFO: Downloading ({i}/{total}): ID: "{id}"', flush=True)
             download_yt(yt_dlp_args, [id])
-
 
     # Removing videos from local playlist:
     if not len(removed_ids) == 0:
