@@ -142,10 +142,11 @@ def sync_playlist(
 
         # Embed thumbnail as a cover art if compatible format
         if preferred_codec in {"mp3", "m4a", "flac"}:
-            postprocessors.append({"key": "EmbedThumbnail"})
+            postprocessors.append(
+                {"key": "EmbedThumbnail", "already_have_thumbnail": False}
+            )
+            yt_dlp_args["outtmpl"] = {"pl_thumbnail": ""}
             yt_dlp_args["writethumbnail"] = True
-        else:
-            yt_dlp_args["writethumbnail"] = False
 
         yt_dlp_args["postprocessors"] = postprocessors
 
