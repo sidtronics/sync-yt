@@ -9,7 +9,7 @@ authors = [
     {name = "Siddhesh Dharme", email = "siddheshdharme18@gmail.com"}
 ]
 description = "CLI tool to mirror YouTube playlists into local directories"
-dependencies = ["yt-dlp >= 2025.08.27"]
+dependencies = ["yt-dlp"]
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
