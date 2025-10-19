@@ -84,8 +84,10 @@ Configuration file is first searched at `~/.config/sync-yt/config.json` on POSIX
       - **Description**: Indicates whether the videos in the playlist should be converted to audio files. Set it to `true` if you want an audio file. If the entry is omitted, it will be set to `false` by default.
 
     - **`format`**
-	    - **Type**: `string`
+	  - **Type**: `string`
       - **Description**: Indicate the audio or video codec you want. If the entry is omitted, it will be set to `best` by default.
+          - Supported video formats: `avi, flv, mkv, mov, mp4, webm`
+          - Supported audio formats (requires `convert_to_audio` set to `true`): `aac, alac, flac, m4a, mp3, opus, vorbis, wav`
       - **Example**: `"mp3"` or `"mkv"`
 
 
