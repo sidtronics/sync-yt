@@ -8,6 +8,7 @@ It uses yt-dlp for downloading videos and a JSON based configuration file to def
 + Can sync private YouTube playlists by specifying the logged-in browser.
 + Automatically skips repeated video entries.
 + Detects videos which become unavailable.
++ Add metadata and thumbnail to audio files
 
 ## Requirements
 + Python 3.10+
@@ -80,7 +81,13 @@ Configuration file is first searched at `~/.config/sync-yt/config.json` on POSIX
 
     - **`convert_to_audio`**
       - **Type**: `boolean`
-      - **Description**: Indicates whether the videos in the playlist should be converted to audio files. If `true`, the videos will be converted to audio.
+      - **Description**: Indicates whether the videos in the playlist should be converted to audio files. Set it to `true` if you want an audio file. If the entry is omitted, it will be set to `false` by default.
+
+    - **`format`**
+	    - **Type**: `string`
+      - **Description**: Indicate the audio or video codec you want. If the entry is omitted, it will be set to `best` by default.
+      - **Example**: `"mp3"` or `"mkv"`
+
 
 ### Example Configuration
 
@@ -99,7 +106,7 @@ Below is a sample `config.json` file demonstrating the use of the configuration 
         {
             "name": "Minuscule Compilation",
             "url": "https://www.youtube.com/playlist?list=PL7eLsxQrsg-4DNH682TNzgSlCXEeJ3IsX",
-            "convert_to_audio": false
+            "format": "mp4"
         }
     ]
 }
@@ -119,3 +126,5 @@ Upon removal from upstream playlist it will be removed locally as well on next s
 + Two different playlist can share same `name` attribute to sync both playlists in a single folder.
 
 + You can skip installation of FFmpeg but it is highly recommended especially if you are using `convert_to_audio` option.
+
++ metadata and thumbnail will be add to audio files only if the codec is compatible (like .mp3 or .flac)

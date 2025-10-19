@@ -28,7 +28,8 @@ def main():
         sync_playlist(
             playlist_dir,
             playlist["url"],
-            playlist["convert_to_audio"],
+            playlist.get("convert_to_audio"),
+            playlist.get("format"),
             cookies_from_browser,
         )
         print("-" * 50)

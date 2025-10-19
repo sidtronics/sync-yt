@@ -95,6 +95,7 @@ def sync_playlist(
     playlist_dir: Path,
     playlist_url: str,
     convert_to_audio: bool = False,
+    format: str = None,
     cookies_from_browser: str = None,
 ):
 
@@ -115,35 +116,59 @@ def sync_playlist(
         yt_dlp_args["cookiesfrombrowser"] = (cookies_from_browser,)
 
     if convert_to_audio:
+
         yt_dlp_args["format"] = "bestaudio/best"
-        yt_dlp_args["postprocessors"] = [
+        preferred_codec = format or "best"
+
+        postprocessors = [
             {
                 "key": "FFmpegExtractAudio",
                 "nopostoverwrites": False,
-                "preferredcodec": "best",
+                "preferredcodec": preferred_codec,
                 "preferredquality": "5",
-            },
-            {"key": "EmbedThumbnail"},
-            {"key": "FFmpegMetadata"},
+            }
         ]
 
-    yt_dlp_args["writethumbnail"] = True
-    yt_dlp_args["addmetadata"] = True
+        # Embed metadata if compatible format
+        if preferred_codec in {"mp3", "m4a", "flac", "opus", "ogg"}:
+            postprocessors.append({"key": "FFmpegMetadata"})
+            yt_dlp_args["addmetadata"] = True
+            yt_dlp_args["parse_metadata"] = [
+                "title:%(title)s",
+                "uploader:%(artist)s",
+            ]
+        else:
+            yt_dlp_args["addmetadata"] = False
 
-    yt_dlp_args["parse_metadata"] = [
-        "title:%(title)s",
-        "uploader:%(artist)s",
-    ]
+        # Embed thumbnail as a cover art if compatible format
+        if preferred_codec in {"mp3", "m4a", "flac"}:
+            postprocessors.append({"key": "EmbedThumbnail"})
+            yt_dlp_args["writethumbnail"] = True
+        else:
+            yt_dlp_args["writethumbnail"] = False
 
-    if not os.path.exists(archive_path):
+        yt_dlp_args["postprocessors"] = postprocessors
+
+    # if video
+    else:
+        if format is None:
+            yt_dlp_args["format"] = "bestvideo/best"
+        else:
+            yt_dlp_args["format"] = f"bestvideo[ext={format}]/best"
+
+        yt_dlp_args["postprocessors"] = [
+            {"key": "FFmpegVideoRemuxer", "preferedformat": format}
+        ]
+
+    if os.path.exists(archive_path):
+        archive_ids = get_archive(playlist_dir)
+    else:
         print(f'[sync-yt] INFO: Downloading new playlist at: "{playlist_dir}"')
-        download_yt(yt_dlp_args, playlist_url)
+        archive_ids = set()
+        Path(archive_path).touch()
         print(f'[sync-yt] INFO: Created: "{playlist_name}/archive.txt"')
-        print(f'[sync-yt] INFO: Synced: "{playlist_name}"')
-        return
 
     playlist_ids = get_playlist(playlist_url, cookies_from_browser)
-    archive_ids = get_archive(playlist_dir)
 
     added_ids = playlist_ids - archive_ids
     removed_ids = archive_ids - playlist_ids
