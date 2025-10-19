@@ -122,8 +122,18 @@ def sync_playlist(
                 "nopostoverwrites": False,
                 "preferredcodec": "best",
                 "preferredquality": "5",
-            }
+            },
+            {"key": "EmbedThumbnail"},
+            {"key": "FFmpegMetadata"},
         ]
+
+    yt_dlp_args["writethumbnail"] = True
+    yt_dlp_args["addmetadata"] = True
+
+    yt_dlp_args["parse_metadata"] = [
+        "title:%(title)s",
+        "uploader:%(artist)s",
+    ]
 
     if not os.path.exists(archive_path):
         print(f'[sync-yt] INFO: Downloading new playlist at: "{playlist_dir}"')
@@ -143,11 +153,13 @@ def sync_playlist(
         return
 
     # Adding new videos to local playlist:
-    if not len(added_ids) == 0:
-        for id in added_ids:
-            print(f'[sync-yt] INFO: Downloading: ID: "{id}"')
+    if added_ids:
+        total = len(added_ids)
+        print(f"[sync-yt] INFO: {total} new video(s) to download.")
 
-        download_yt(yt_dlp_args, added_ids)
+        for i, id in enumerate(added_ids, start=1):
+            print(f'[sync-yt] INFO: Downloading ({i}/{total}): ID: "{id}"', flush=True)
+            download_yt(yt_dlp_args, [id])
 
     # Removing videos from local playlist:
     if not len(removed_ids) == 0:
