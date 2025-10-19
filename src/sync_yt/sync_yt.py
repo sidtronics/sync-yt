@@ -119,7 +119,7 @@ def sync_playlist(
                 "key": "FFmpegExtractAudio",
                 "nopostoverwrites": False,
                 "preferredcodec": preferred_codec,
-                "preferredquality": "5",
+                "preferredquality": "0",
             }
         ]
 
