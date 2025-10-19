@@ -146,14 +146,29 @@ def sync_playlist(
 
     # if video
     else:
-        if format is None:
-            yt_dlp_args["format"] = "bestvideo/best"
-        else:
-            yt_dlp_args["format"] = f"bestvideo[ext={format}]/best"
 
-        yt_dlp_args["postprocessors"] = [
-            {"key": "FFmpegVideoRemuxer", "preferedformat": format}
-        ]
+        if format in {"avi", "flv", "mkv", "mov", "mp4", "webm"}:
+
+            yt_dlp_args["final_ext"] = format
+            yt_dlp_args["merge_output_format"] = format
+
+            yt_dlp_args["postprocessors"] = [
+                {"key": "FFmpegVideoRemuxer", "preferedformat": format}
+            ]
+
+            if format == "mp4":
+                yt_dlp_args["format_sort"] = [
+                    "vcodec:h264",
+                    "lang",
+                    "quality",
+                    "res",
+                    "fps",
+                    "hdr:12",
+                    "acodec:aac",
+                ]
+
+        elif format:
+            print(f'[sync-yt] WARN: Unsupported video format: "{format}"')
 
     if os.path.exists(archive_path):
         archive_ids = get_archive(playlist_dir)
