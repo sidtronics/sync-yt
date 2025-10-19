@@ -116,25 +116,25 @@ def sync_playlist(
         yt_dlp_args["cookiesfrombrowser"] = (cookies_from_browser,)
 
     if convert_to_audio:
-        
+
         if format is None:
             yt_dlp_args["format"] = "bestaudio/best"
             preferred_codec = "best"
-            
+
         else:
             yt_dlp_args["format"] = "bestaudio/best"
             preferred_codec = format
-        
+
         metadata_compatible = {"mp3", "m4a", "flac", "opus", "ogg"}
         thumbnail_compatible = {"mp3", "m4a", "flac"}
 
         postprocessors = [
-        {
-            "key": "FFmpegExtractAudio",
-            "nopostoverwrites": False,
-            "preferredcodec": preferred_codec,
-            "preferredquality": "5",
-        }
+            {
+                "key": "FFmpegExtractAudio",
+                "nopostoverwrites": False,
+                "preferredcodec": preferred_codec,
+                "preferredquality": "5",
+            }
         ]
 
         if preferred_codec in metadata_compatible:
@@ -147,7 +147,6 @@ def sync_playlist(
         else:
             yt_dlp_args["addmetadata"] = False
 
-
         if preferred_codec in thumbnail_compatible:
             postprocessors.append({"key": "EmbedThumbnail"})
             yt_dlp_args["writethumbnail"] = True
@@ -155,19 +154,16 @@ def sync_playlist(
             yt_dlp_args["writethumbnail"] = False
 
         yt_dlp_args["postprocessors"] = postprocessors
-        
-    #if video
+
+    # if video
     else:
         if format is None:
             yt_dlp_args["format"] = "bestvideo/best"
         else:
-                yt_dlp_args["format"] = f"bestvideo[ext={format}]/best"
-        
+            yt_dlp_args["format"] = f"bestvideo[ext={format}]/best"
+
         yt_dlp_args["postprocessors"] = [
-                    {
-                        "key": "FFmpegVideoRemuxer",
-                        "preferedformat": format
-                    }
+            {"key": "FFmpegVideoRemuxer", "preferedformat": format}
         ]
 
     if os.path.exists(archive_path):
