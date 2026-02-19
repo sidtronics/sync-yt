@@ -6,14 +6,14 @@ import os
 def main():
 
     if os.name == "posix":
-        default_path = Path("~/.config/sync-yt/config.json").expanduser()
+        config_path = Path("~/.config/sync-yt/config.json").expanduser()
     elif os.name == "nt":
-        default_path = Path(r"~\AppData\Local\sync-yt\config.json").expanduser()
+        config_path = Path(r"~\AppData\Local\sync-yt\config.json").expanduser()
 
-    if not os.path.exists(default_path):
-        default_path = Path("./config.json")
+    if not os.path.exists(config_path):
+        config_path = Path("./config.json")
 
-    config = parse_config(default_path)
+    config = parse_config(config_path)
 
     sync_dir = Path(config["sync_dir"]).expanduser()
     if not os.path.exists(sync_dir):
