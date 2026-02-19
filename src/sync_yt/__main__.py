@@ -1,9 +1,16 @@
-from .sync_yt import sync_playlist, parse_config
+from .sync_yt import sync_all, parse_config
 from pathlib import Path
+import logging as log
 import os
 
 
 def main():
+
+    log.basicConfig(
+        format="[sync-yt] {levelname}: {message}",
+        style="{",
+        level=log.INFO,
+    )
 
     if os.name == "posix":
         config_path = Path("~/.config/sync-yt/config.json").expanduser()
@@ -15,26 +22,19 @@ def main():
 
     config = parse_config(config_path)
 
-    sync_dir = Path(config["sync_dir"]).expanduser()
-    if not os.path.exists(sync_dir):
-        print(f"[sync-yt] ERROR: sync_dir does not exist ({sync_dir}).")
+    sync_dir = config.get("sync_dir")
+
+    if not sync_dir:
+        log.error("sync_dir not defined in config")
         exit(1)
 
-    cookies_from_browser = config["cookies_from_browser"]
+    sync_dir = Path(sync_dir).expanduser()
 
-    for playlist in config["playlists"]:
-        playlist_dir = os.path.join(sync_dir, playlist["name"])
-        print(f'[sync-yt] INFO: Syncing: "{playlist["name"]}"')
-        sync_playlist(
-            playlist_dir,
-            playlist["url"],
-            playlist.get("convert_to_audio"),
-            playlist.get("format"),
-            cookies_from_browser,
-        )
-        print("-" * 50)
+    if not sync_dir.exists():
+        log.error("sync_dir does not exist: %s", sync_dir)
+        exit(1)
 
-    print("[sync-yt] INFO: Finished Syncing")
+    sync_all(config)
 
 
 if __name__ == "__main__":
