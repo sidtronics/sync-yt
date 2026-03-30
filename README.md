@@ -13,13 +13,14 @@ It uses yt-dlp for downloading videos and a JSON based configuration file to def
 ## Requirements
 + Python 3.10+
 + yt-dlp
-+ FFmpeg (Optional but highly recommended)
++ Node.js [Installation](https://nodejs.org/en/download)
++ FFmpeg (Optional but highly recommended) [Installation](https://ffmpeg.org/download.html)
+
+Make sure that both Node.js and FFmpeg are in your PATH.
 
 ## Installation
 
 + ### Windows
-  + #### Install FFmpeg
-    Follow this [guide](https://www.geeksforgeeks.org/installation-guide/how-to-install-ffmpeg-on-windows/) to properly install FFmpeg on Windows.
   + #### Install `sync-yt`
     ```
     $ pip install sync-yt

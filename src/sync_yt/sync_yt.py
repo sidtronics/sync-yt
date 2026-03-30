@@ -1,4 +1,5 @@
 from yt_dlp import YoutubeDL
+from yt_dlp.networking.impersonate import ImpersonateTarget
 from pathlib import Path
 import json
 import os
@@ -58,7 +59,13 @@ def remove_from_archive(playlist_dir: Path, video_ids: list):
 
 def get_playlist(playlist_url: str, cookies_from_browser: str = None):
 
-    yt_dlp_args = {"extract_flat": "in_playlist", "quiet": True, "no_warnings": True}
+    yt_dlp_args = {
+        "extract_flat": "in_playlist",
+        "quiet": True,
+        "no_warnings": True,
+        "js_runtimes": {"node": {}},  # Force the use of Node.js
+        "impersonate": ImpersonateTarget(client="chrome"),  # Disguise as a navigator
+    }
     if cookies_from_browser is not None:
         yt_dlp_args["cookiesfrombrowser"] = (cookies_from_browser,)
 
@@ -104,6 +111,8 @@ def sync_playlist(
         "paths": {"home": playlist_dir},
         "ignoreerrors": "only_download",
         "quiet": True,
+        "js_runtimes": {"node": {}},  # Force the use of Node.js
+        "impersonate": ImpersonateTarget(client="chrome"),  # Disguise as a navigator
     }
 
     if cookies_from_browser is not None:
