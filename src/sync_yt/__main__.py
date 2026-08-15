@@ -13,12 +13,12 @@ def main():
     )
 
     if os.name == "posix":
-        config_path = Path("~/.config/sync-yt/config.json").expanduser()
+        config_path = Path("~/.config/sync-yt/config.yaml").expanduser()
     elif os.name == "nt":
-        config_path = Path(r"~\AppData\Local\sync-yt\config.json").expanduser()
+        config_path = Path(r"~\AppData\Local\sync-yt\config.yaml").expanduser()
 
     if not os.path.exists(config_path):
-        config_path = Path("./config.json")
+        config_path = Path("./config.yaml")
 
     config = parse_config(config_path)
 

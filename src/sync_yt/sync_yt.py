@@ -1,18 +1,21 @@
+from ruamel.yaml import YAML
+from ruamel.yaml.error import YAMLError
 from yt_dlp import YoutubeDL
 from yt_dlp.networking.impersonate import ImpersonateTarget
 from pathlib import Path
 import logging as log
-import json
 import os
 import re
+
+yaml = YAML()
 
 
 def parse_config(config_path: Path):
 
     try:
-        with open(config_path, "r") as file:
-            config = json.load(file)
-    except json.JSONDecodeError as e:
+        with open(config_path, "r") as f:
+            config = yaml.load(f)
+    except YAMLError as e:
         log.error('Error while parsing "%s" : %s', config_path, e)
         exit(1)
     except FileNotFoundError:
@@ -123,9 +126,7 @@ def append_audio_args(yt_dlp_args, format):
 
     # Embed thumbnail as a cover art if compatible format
     if preferred_codec in {"mp3", "m4a", "flac"}:
-        postprocessors.append(
-            {"key": "FFmpegThumbnailsConvertor", "format": "jpg"}
-        )
+        postprocessors.append({"key": "FFmpegThumbnailsConvertor", "format": "jpg"})
         postprocessors.append(
             {"key": "EmbedThumbnail", "already_have_thumbnail": False}
         )
